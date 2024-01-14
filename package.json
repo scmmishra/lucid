@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview",
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
@@ -12,7 +15,10 @@
     "vue": "^3.3.11"
   },
   "devDependencies": {
+    "@histoire/plugin-vue": "^0.17.6",
+    "@types/node": "^20.11.0",
     "@vitejs/plugin-vue": "^4.5.2",
+    "historie": "^1.0.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vue-tsc": "^1.8.25"
