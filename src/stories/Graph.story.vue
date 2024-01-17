@@ -7,7 +7,7 @@ const values = [10, 20, 40, 30, 48, 32, 10, 20, 40, 30, 48, 32];
 
 <template>
   <Story>
-    <Graph :height="200">
+    <Graph :height="200" :space-ratio="0.2">
       <Bar v-for="value in values" :value="value" fill="pink" />
     </Graph>
   </Story>
