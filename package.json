@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^10.7.2",
+    "@vueuse/math": "^10.7.2",
     "vue": "^3.3.11"
   },
   "devDependencies": {
