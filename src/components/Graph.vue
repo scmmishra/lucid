@@ -8,7 +8,7 @@ import Bar from "./Bar.vue";
 import { useGraphControlProvider } from "./provider";
 
 import type { VNodeArrayChildren } from "vue";
-import type { Dataset, GraphControlPayload } from "./provider";
+import type { DatasetItem, GraphControlPayload } from "./provider";
 
 export default defineComponent({
   props: {
@@ -17,9 +17,13 @@ export default defineComponent({
       default: 240,
     },
     maxWidth: Number,
+    spaceRatio: {
+      type: Number,
+      default: 0.5,
+    },
   },
   setup(props, { slots }) {
-    const dataset = ref<Dataset[]>([]);
+    const dataset = ref<DatasetItem[]>([]);
     const parent = useParentElement();
     const { width } = useElementBounding(parent);
     const effectiveWidth = useClamp(width, 0, props.maxWidth ?? width);
@@ -27,13 +31,14 @@ export default defineComponent({
     const measurements = computed(() => ({
       height: props.height,
       width: effectiveWidth.value,
+      spaceRatio: useClamp(props.spaceRatio, 0, 1).value,
     }));
 
     const api: GraphControlPayload = {
       register: (payload, index) => {
         dataset.value[index] = payload;
       },
-      values: computed(() => dataset.value.map((item) => item.value)),
+      dataset: dataset,
       measurements: measurements,
     };
 

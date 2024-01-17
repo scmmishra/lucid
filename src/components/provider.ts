@@ -1,16 +1,17 @@
 import { inject, provide } from "vue";
-import type { ComputedRef, InjectionKey } from "vue";
+import type { ComputedRef, InjectionKey, Ref } from "vue";
 
-export type Dataset = {
+export type DatasetItem = {
   value: number;
 };
 
 export type GraphControlPayload = {
-  register(payload: Dataset, index: number): void;
-  values: ComputedRef<number[]>;
+  register(payload: DatasetItem, index: number): void;
+  dataset: Ref<DatasetItem[]>;
   measurements: ComputedRef<{
     width: number;
     height: number;
+    spaceRatio: number;
     xOffset?: number;
     yOffset?: number;
     containerWidth?: number;
