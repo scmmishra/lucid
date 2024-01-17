@@ -1,10 +1,14 @@
 <script lang="ts">
-import { defineComponent, h, computed, VNodeArrayChildren } from "vue";
-import Bar from "./Bar.vue";
+import { defineComponent, ref, h, computed } from "vue";
+
 import { useElementBounding, useParentElement } from "@vueuse/core";
-import { useGraphControlProvider } from "./provider";
-import type { GraphControlPayload } from "./provider";
 import { useClamp } from "@vueuse/math";
+
+import Bar from "./Bar.vue";
+import { useGraphControlProvider } from "./provider";
+
+import type { VNodeArrayChildren } from "vue";
+import type { Dataset, GraphControlPayload } from "./provider";
 
 export default defineComponent({
   props: {
@@ -15,6 +19,7 @@ export default defineComponent({
     maxWidth: Number,
   },
   setup(props, { slots }) {
+    const dataset = ref<Dataset[]>([]);
     const parent = useParentElement();
     const { width } = useElementBounding(parent);
     const effectiveWidth = useClamp(width, 0, props.maxWidth ?? width);
@@ -25,6 +30,10 @@ export default defineComponent({
     }));
 
     const api: GraphControlPayload = {
+      register: (payload, index) => {
+        dataset.value[index] = payload;
+      },
+      values: computed(() => dataset.value.map((item) => item.value)),
       measurements: measurements,
     };
 

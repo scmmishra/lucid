@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useGraphControl } from "./provider";
 interface Props {
   value: number;
@@ -11,9 +11,20 @@ const props = withDefaults(defineProps<Props>(), {
   value: 0,
 });
 
-const graphContext = useGraphControl("Bar");
-const { measurements } = graphContext;
-const effectiveHeight = measurements.value.height * (props.value / 100);
+const { measurements, values, register } = useGraphControl("Bar");
+
+onMounted(() => {
+  if (props.index === undefined) return;
+  register(props, props.index);
+});
+
+const maxValue = computed(() => {
+  return Math.max(...values.value);
+});
+
+const effectiveHeight = computed(
+  () => measurements.value.height * (props.value / maxValue.value)
+);
 
 const xPos = computed(() => {
   if (props.index === undefined) return 0;
@@ -21,7 +32,7 @@ const xPos = computed(() => {
 });
 
 const yPos = computed(() => {
-  return measurements.value.height - effectiveHeight;
+  return measurements.value.height - effectiveHeight.value;
 });
 </script>
 
@@ -29,9 +40,9 @@ const yPos = computed(() => {
   <rect
     :height="effectiveHeight"
     width="20"
-    fill="sky"
-    style="opacity: 0.2"
+    :name="name"
     :x="xPos"
     :y="yPos"
+    v-bind="$attrs"
   />
 </template>
